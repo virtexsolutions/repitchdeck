@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VIRTEX — Never Miss Another Deal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#DD1D1D;--dark-red:#8A1212;
+  --dark:#0C0C0C;--dark2:#141414;--dark3:#1E1E1E;
+  --td:#F2F2F0;--md:#888;--dd:#3A3A3A;--bd:#2A2A2A;
+  --bl:#F7F6F3;--white:#FFFFFF;--gray:#F0EEE9;--blight:#E2E0DB;
+  --tl:#111;--ml:#5A5A5A;--dl:#999;
+  --green:#2ECC71;--gd:#1A9E5C;--amber:#C47F17;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;}
+.deck{width:100%;height:100vh;position:relative;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .48s ease,transform .48s ease;transform:translateY(18px);}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.exit{opacity:0;transform:translateY(-18px);}
+.progress{position:fixed;top:0;left:0;height:2px;background:var(--red);transition:width .4s ease;z-index:200;}
+.nav{position:fixed;bottom:1rem;right:1.3rem;display:flex;align-items:center;gap:.4rem;z-index:100;background:rgba(10,10,10,.8);backdrop-filter:blur(10px);padding:.35rem .7rem;border-radius:20px;border:1px solid rgba(255,255,255,.07);}
+.nd{width:5px;height:5px;border-radius:50%;background:#3A3A3A;cursor:pointer;transition:all .2s;}
+.nd.on{background:var(--red);transform:scale(1.4);}
+.nb{background:none;border:none;color:#555;cursor:pointer;font-size:.8rem;padding:.1rem .2rem;line-height:1;transition:color .18s;}
+.nb:hover{color:#fff;}
+.nl{font-family:'DM Mono',monospace;font-size:.55rem;color:#444;min-width:28px;text-align:center;}
+.sl{font-size:.56rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;padding:.22rem .6rem;border-radius:20px;display:inline-block;margin-bottom:.75rem;}
+.sl.lgt{color:var(--red);border:1px solid rgba(221,29,29,.28);}
+.sl.drk{color:rgba(221,29,29,.95);border:1px solid rgba(221,29,29,.22);}
+
+/* ── SLIDE 1: HERO DARK ── */
+#s1{background:var(--dark);}
+.s1bg{position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(221,29,29,.08) 0%,transparent 55%),radial-gradient(ellipse at 10% 80%,rgba(221,29,29,.04) 0%,transparent 45%);}
+.s1grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.016) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.016) 1px,transparent 1px);background-size:70px 70px;mask-image:radial-gradient(ellipse at center,black 25%,transparent 75%);}
+.s1wrap{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:1fr 380px;gap:2rem;padding:2rem 3.5rem;align-items:center;}
+.s1-eye{font-size:.65rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:1.1rem;display:flex;align-items:center;gap:.6rem;}
+.s1-eye::before{content:'';width:28px;height:1px;background:var(--red);}
+.s1h1{font-family:'Playfair Display',serif;font-size:clamp(3rem,6.5vw,5.2rem);font-weight:900;line-height:.98;letter-spacing:-.02em;margin-bottom:1.1rem;color:var(--td);}
+.s1h1 em{color:var(--red);font-style:italic;}
+.s1sub{font-size:.95rem;color:var(--md);line-height:1.7;max-width:500px;margin-bottom:1.75rem;}
+.s1demo{display:flex;align-items:center;gap:.85rem;}
+.dbtn{display:inline-flex;align-items:center;gap:.5rem;background:var(--red);color:#fff;padding:.75rem 1.5rem;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer;border:none;transition:background .2s;white-space:nowrap;}
+.dbtn:hover{background:var(--dark-red);}
+.dnum{font-family:'DM Mono',monospace;font-size:.82rem;color:var(--md);}
+.s1stats{display:flex;flex-direction:column;gap:.7rem;}
+.s1stat{background:var(--dark2);border:1px solid var(--bd);border-radius:12px;padding:1.2rem 1.4rem;}
+.s1stat-v{font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500;color:var(--red);line-height:1;margin-bottom:.3rem;}
+.s1stat-l{font-size:.75rem;color:var(--md);line-height:1.45;}
+
+/* ── SLIDE 2: REALITY LIGHT ── */
+#s2{background:var(--bl);}
+.s2wrap{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
+.s2L{padding:2.5rem 2rem 2.5rem 3.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--blight);}
+.s2h2{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:700;line-height:1.1;margin-bottom:.9rem;color:var(--tl);}
+.s2h2 em{color:var(--red);font-style:italic;}
+.s2body{font-size:.92rem;color:var(--ml);line-height:1.7;margin-bottom:1.3rem;}
+.s2hero{background:var(--white);border:1px solid var(--blight);border-left:4px solid var(--red);border-radius:0 10px 10px 0;padding:1.3rem 1.5rem;}
+.s2hero-v{font-family:'DM Mono',monospace;font-size:2.8rem;font-weight:500;color:var(--red);line-height:1;margin-bottom:.35rem;}
+.s2hero-l{font-size:.8rem;color:var(--ml);line-height:1.5;}
+.s2R{padding:2rem 3rem 2rem 2.5rem;display:flex;flex-direction:column;justify-content:center;gap:.45rem;}
+.fstep{display:flex;align-items:flex-start;gap:.85rem;padding:.9rem 1.1rem;border-radius:8px;border:1px solid var(--blight);background:var(--white);}
+.fstep.bad{border-color:rgba(221,29,29,.22);background:rgba(221,29,29,.025);}
+.fnum{width:26px;height:26px;border-radius:50%;background:var(--gray);display:flex;align-items:center;justify-content:center;font-size:.67rem;font-weight:700;color:var(--ml);flex-shrink:0;margin-top:.08rem;}
+.fstep.bad .fnum{background:rgba(221,29,29,.15);color:var(--red);}
+.ftxt{font-size:.84rem;color:var(--ml);line-height:1.45;}
+.fstep.bad .ftxt{color:var(--tl);font-weight:500;}
+.fconn{width:1px;height:8px;background:var(--blight);margin-left:1.8rem;}
+
+/* ── SLIDE 3: COST DARK ── */
+#s3{background:var(--dark);}
+.s3wrap{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
+.s3L{padding:2.5rem 2rem 2.5rem 3.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--bd);}
+.s3h2{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;line-height:1.1;margin-bottom:.8rem;color:var(--td);}
+.s3h2 em{color:var(--red);font-style:italic;}
+.s3intro{font-size:.9rem;color:var(--md);line-height:1.65;margin-bottom:1.2rem;}
+.crow{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1rem;border-radius:7px;background:var(--dark2);border:1px solid var(--bd);margin-bottom:.4rem;}
+.crow.tot{border-color:rgba(221,29,29,.3);background:rgba(221,29,29,.06);}
+.crow.vx{border-color:rgba(46,204,113,.22);background:rgba(46,204,113,.04);}
+.clbl{font-size:.82rem;color:var(--md);}
+.cval{font-family:'DM Mono',monospace;font-size:.95rem;font-weight:500;color:var(--td);}
+.crow.tot .cval{color:var(--red);}
+.crow.vx .cval{color:var(--green);}
+.s3R{padding:2rem 3rem 2rem 2.5rem;display:flex;flex-direction:column;justify-content:center;gap:1rem;}
+.s3chart-title{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--md);margin-bottom:1rem;}
+.bar-chart{display:flex;flex-direction:column;gap:.75rem;}
+.bc-row{display:flex;align-items:center;gap:.85rem;}
+.bc-label{font-size:.75rem;color:var(--md);min-width:140px;text-align:right;}
+.bc-track{flex:1;background:var(--dd);border-radius:3px;height:32px;overflow:hidden;position:relative;}
+.bc-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:.75rem;}
+.bc-fill-label{font-family:'DM Mono',monospace;font-size:.8rem;font-weight:500;color:#fff;white-space:nowrap;}
+.bc-val{font-family:'DM Mono',monospace;font-size:.82rem;font-weight:500;min-width:60px;text-align:right;}
+.s3quote{background:var(--dark3);border:1px solid var(--bd);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:1rem 1.2rem;}
+.s3qt{font-family:'Playfair Display',serif;font-size:.95rem;font-style:italic;color:var(--td);line-height:1.55;margin-bottom:.35rem;}
+.s3qa{font-size:.68rem;color:var(--md);}
+
+/* ── SLIDE 4: SOLUTION LIGHT ── */
+#s4{background:var(--white);}
+.s4wrap{flex:1;display:flex;flex-direction:column;padding:2rem 3.5rem;overflow:hidden;}
+.s4top{display:grid;grid-template-columns:auto 1fr;gap:3rem;margin-bottom:1.5rem;align-items:end;}
+.s4h2{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:700;line-height:1.05;color:var(--tl);}
+.s4h2 em{color:var(--red);font-style:italic;}
+.s4sub{font-size:.92rem;color:var(--ml);line-height:1.65;max-width:520px;}
+.s4grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;flex:1;}
+.fc{background:var(--bl);border:1px solid var(--blight);border-radius:12px;padding:1.3rem 1.4rem;display:flex;flex-direction:column;gap:.45rem;transition:border-color .2s,transform .2s;}
+.fc:hover{border-color:rgba(221,29,29,.3);transform:translateY(-2px);}
+.fci{font-size:1.35rem;margin-bottom:.2rem;}
+.fct{font-size:.9rem;font-weight:600;color:var(--tl);}
+.fcb{font-size:.78rem;color:var(--ml);line-height:1.55;flex:1;}
+.fctag{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin-top:.3rem;}
+.s4badge{margin-top:.85rem;font-size:.72rem;color:var(--ml);text-align:center;}
+.s4badge span{color:var(--gd);font-weight:600;}
+
+/* ── SLIDE 5: DATA DARK ── */
+#s5{background:var(--dark);}
+.s5wrap{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
+.s5L{padding:2.5rem 2rem 2.5rem 3.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--bd);}
+.s5h2{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:700;line-height:1.05;margin-bottom:.4rem;color:var(--td);}
+.s5h2 em{color:var(--red);font-style:italic;}
+.s5sub{font-size:.88rem;color:var(--md);margin-bottom:1.75rem;line-height:1.6;}
+.s5stats{display:flex;flex-direction:column;gap:.7rem;}
+.s5stat{display:flex;align-items:center;gap:1.1rem;padding:.9rem 1.1rem;background:var(--dark2);border:1px solid var(--bd);border-radius:10px;}
+.s5stat-v{font-family:'DM Mono',monospace;font-size:2.2rem;font-weight:500;color:var(--red);line-height:1;min-width:80px;}
+.s5stat-l{font-size:.78rem;color:var(--md);line-height:1.45;}
+.s5R{padding:2rem 2.5rem 2rem 2rem;display:flex;flex-direction:column;}
+.s5chart-title{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--md);margin-bottom:.75rem;}
+.s5canvas-wrap{flex:1;position:relative;min-height:0;}
+
+/* ── SLIDE 6: DEMO LIGHT ── */
+#s6{background:var(--bl);}
+.s6wrap{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
+.s6L{padding:2.5rem 2rem 2.5rem 3.5rem;display:flex;flex-direction:column;border-right:1px solid var(--blight);}
+.s6h2{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;line-height:1.1;margin-bottom:.65rem;color:var(--tl);}
+.s6h2 em{color:var(--red);font-style:italic;}
+.s6sub{font-size:.9rem;color:var(--ml);line-height:1.65;margin-bottom:.9rem;}
+.chat{background:var(--white);border:1px solid var(--blight);border-radius:13px;padding:1.1rem;flex:1;display:flex;flex-direction:column;gap:.7rem;overflow:hidden;}
+.chat-hdr{display:flex;align-items:center;gap:.65rem;padding-bottom:.8rem;border-bottom:1px solid var(--blight);}
+.chav{width:34px;height:34px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;color:#fff;flex-shrink:0;}
+.chn{font-size:.84rem;font-weight:600;color:var(--tl);}
+.chr{font-size:.64rem;color:var(--ml);}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--gd);display:inline-block;margin-right:3px;}
+.cmsg{display:flex;gap:.5rem;align-items:flex-start;}
+.cmsg.hu{flex-direction:row-reverse;}
+.cmav{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.64rem;font-weight:700;}
+.cmsg.ai .cmav{background:var(--red);color:#fff;}
+.cmsg.hu .cmav{background:var(--gray);border:1px solid var(--blight);color:var(--ml);}
+.cmbub{max-width:86%;padding:.55rem .8rem;border-radius:9px;font-size:.79rem;line-height:1.55;}
+.cmsg.ai .cmbub{background:var(--bl);border:1px solid var(--blight);color:var(--tl);}
+.cmsg.hu .cmbub{background:rgba(221,29,29,.07);border:1px solid rgba(221,29,29,.14);color:var(--tl);}
+.s6R{padding:2rem 2.5rem 2rem 2rem;display:flex;flex-direction:column;justify-content:center;gap:.75rem;}
+.dcta{background:var(--white);border:1px solid var(--blight);border-radius:13px;padding:1.5rem;text-align:center;}
+.dcta-lbl{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ml);margin-bottom:.4rem;}
+.dcta-num{font-family:'DM Mono',monospace;font-size:2.2rem;font-weight:500;color:var(--red);margin-bottom:.4rem;}
+.dcta-sub{font-size:.75rem;color:var(--ml);line-height:1.5;}
+.dcall{display:inline-flex;align-items:center;gap:.45rem;background:var(--red);color:#fff;padding:.65rem 1.4rem;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;margin-top:.85rem;transition:background .2s;}
+.dcall:hover{background:var(--dark-red);}
+.hlist{display:flex;flex-direction:column;gap:.4rem;}
+.hi{display:flex;align-items:center;gap:.65rem;padding:.55rem .8rem;background:var(--white);border:1px solid var(--blight);border-radius:6px;}
+.hdot{width:5px;height:5px;border-radius:50%;background:var(--red);flex-shrink:0;}
+.htxt{font-size:.8rem;color:var(--ml);}
+
+/* ── SLIDE 7: HOW IT WORKS DARK ── */
+#s7{background:var(--dark);}
+.s7wrap{flex:1;display:flex;flex-direction:column;padding:2rem 3.5rem;overflow:hidden;}
+.s7h2{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;line-height:1.05;margin-bottom:.35rem;color:var(--td);}
+.s7sub{font-size:.88rem;color:var(--md);margin-bottom:1.5rem;}
+.s7steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;flex:1;}
+.sc{display:flex;flex-direction:column;padding:1.5rem 1.2rem;border-right:1px solid var(--bd);}
+.sc:last-child{border-right:none;}
+.sc-num{font-family:'DM Mono',monospace;font-size:2.6rem;font-weight:500;color:var(--red);line-height:1;margin-bottom:1rem;}
+.sc-icon{font-size:1.6rem;margin-bottom:.75rem;}
+.sc-title{font-size:.9rem;font-weight:600;color:var(--td);margin-bottom:.55rem;line-height:1.3;}
+.sc-body{font-size:.76rem;color:var(--md);line-height:1.6;flex:1;}
+.s7bot{margin-top:1.3rem;padding-top:1.1rem;border-top:1px solid var(--bd);display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;}
+.s7bs{text-align:center;padding:.5rem;}
+.s7bv{font-family:'DM Mono',monospace;font-size:1.5rem;font-weight:500;color:var(--red);}
+.s7bl{font-size:.63rem;color:var(--md);margin-top:.2rem;}
+
+/* ── SLIDE 8: PRICING LIGHT ── */
+#sjobs{background:var(--white);}
+.s8wrap{flex:1;display:flex;flex-direction:column;padding:1.75rem 3.5rem;overflow:hidden;}
+.s8h2{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:700;line-height:1.05;margin-bottom:.3rem;color:var(--tl);}
+.s8sub{font-size:.86rem;color:var(--ml);margin-bottom:1.2rem;}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;flex:1;}
+.pc{background:var(--bl);border:1px solid var(--blight);border-radius:13px;padding:1.3rem;display:flex;flex-direction:column;gap:.45rem;position:relative;overflow:hidden;}
+.pc.ft{border-color:var(--red);background:rgba(221,29,29,.025);}
+.pc.ft::before{content:'MOST POPULAR';position:absolute;top:0;right:0;background:var(--red);color:#fff;font-size:.5rem;font-weight:700;letter-spacing:.1em;padding:.28rem .7rem;border-bottom-left-radius:7px;}
+.ptier{font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ml);margin-bottom:.2rem;}
+.pprice{font-family:'DM Mono',monospace;font-size:2.8rem;font-weight:500;line-height:1;color:var(--red);}
+.pprice sub{font-size:.82rem;font-weight:400;color:var(--ml);vertical-align:baseline;}
+.psetup{font-size:.7rem;color:var(--dl);margin-bottom:.25rem;}
+.pdiv{height:1px;background:var(--blight);margin:.25rem 0;}
+.pf{display:flex;align-items:flex-start;gap:.5rem;font-size:.76rem;color:var(--ml);line-height:1.4;padding:.22rem 0;}
+.pf::before{content:'✓';color:var(--red);font-weight:700;flex-shrink:0;}
+.pf.dim{color:#CCC;}
+.pf.dim::before{color:#DDD;}
+.pcta{margin-top:auto;font-size:.68rem;color:var(--ml);padding-top:.5rem;border-top:1px solid var(--blight);}
+.s8foot{margin-top:.9rem;display:flex;align-items:center;justify-content:center;gap:1.75rem;}
+.s8fi{font-size:.7rem;color:var(--ml);display:flex;align-items:center;gap:.35rem;}
+.s8fi::before{content:'✓';color:var(--gd);font-weight:700;}
+
+/* ── SLIDE 9: CTA DARK ── */
+#s9{background:var(--dark);}
+.s9bg{position:absolute;inset:0;background:radial-gradient(ellipse at 25% 55%,rgba(221,29,29,.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 25%,rgba(221,29,29,.04) 0%,transparent 45%);}
+.s9wrap{position:relative;z-index:2;flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
+.s9L{padding:2.5rem 2rem 2.5rem 3.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--bd);}
+.s9h2{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;line-height:1.0;margin-bottom:.9rem;color:var(--td);}
+.s9h2 em{color:var(--red);font-style:italic;}
+.s9sub{font-size:.92rem;color:var(--md);line-height:1.7;margin-bottom:1.75rem;}
+.s9acts{display:flex;flex-direction:column;gap:.65rem;}
+.ctp{background:var(--red);color:#fff;padding:.95rem 1.6rem;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer;border:none;text-align:left;transition:background .2s;}
+.ctp:hover{background:var(--dark-red);}
+.cts{background:transparent;color:var(--md);padding:.8rem 1.6rem;border-radius:8px;font-size:.86rem;cursor:pointer;border:1px solid var(--bd);text-align:left;transition:all .2s;}
+.cts:hover{border-color:var(--white);color:var(--white);}
+.s9R{padding:2.5rem 3rem 2.5rem 2.5rem;display:flex;flex-direction:column;justify-content:center;gap:.7rem;}
+.ns{display:flex;align-items:flex-start;gap:.85rem;padding:1rem 1.1rem;background:var(--dark2);border:1px solid var(--bd);border-radius:10px;}
+.nsn{width:28px;height:28px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#fff;flex-shrink:0;}
+.nst{font-size:.84rem;font-weight:600;color:var(--td);margin-bottom:.22rem;}
+.nsb{font-size:.73rem;color:var(--md);line-height:1.45;}
+.s9con{margin-top:.25rem;padding:.8rem 1.1rem;background:var(--dark3);border:1px solid var(--bd);border-radius:7px;text-align:center;}
+.s9cl{font-size:.56rem;color:var(--dd);margin-bottom:.2rem;letter-spacing:.08em;text-transform:uppercase;}
+.s9ci{font-size:.8rem;color:var(--md);}
+.s9ci a{color:var(--red);text-decoration:none;}
+
+/* ── SLIDE 8: NOT TAKING JOBS (LIGHT) ── */
+#sjobs{background:var(--white);}
+.sjwrap{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;}
+.sjL{padding:2.5rem 2rem 2.5rem 3.5rem;display:flex;flex-direction:column;justify-content:center;border-right:1px solid var(--blight);}
+.sjh2{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;line-height:1.1;margin-bottom:.9rem;color:var(--tl);}
+.s8nh2 em{color:var(--red);font-style:italic;}
+.sjbody{font-size:.9rem;color:var(--ml);line-height:1.7;margin-bottom:1.2rem;}
+.sjstat{background:var(--bl);border:1px solid var(--blight);border-left:4px solid var(--red);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin-bottom:.7rem;}
+.sjstat-v{font-family:'DM Mono',monospace;font-size:2rem;font-weight:500;color:var(--red);line-height:1;margin-bottom:.2rem;}
+.sjstat-l{font-size:.76rem;color:var(--ml);line-height:1.4;}
+.sjR{padding:2rem 3rem 2rem 2.5rem;display:flex;flex-direction:column;justify-content:center;gap:.6rem;}
+.sjshift-title{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ml);margin-bottom:.45rem;}
+.sjcard{background:var(--bl);border:1px solid var(--blight);border-radius:10px;padding:.95rem 1.1rem;display:flex;align-items:flex-start;gap:.85rem;}
+.sjarrow{display:flex;flex-direction:column;align-items:center;gap:.25rem;flex-shrink:0;padding-top:.05rem;}
+.sjfrom{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .55rem;border-radius:4px;background:rgba(221,29,29,.08);color:var(--red);border:1px solid rgba(221,29,29,.15);white-space:nowrap;}
+.sjto{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .55rem;border-radius:4px;background:rgba(26,158,92,.08);color:var(--gd);border:1px solid rgba(26,158,92,.2);white-space:nowrap;}
+.sjico{font-size:.65rem;color:var(--blight);}
+.sjctitle{font-size:.84rem;font-weight:600;color:var(--tl);margin-bottom:.2rem;}
+.sjcbody{font-size:.74rem;color:var(--ml);line-height:1.45;}
+.sjquote{background:rgba(221,29,29,.04);border:1px solid rgba(221,29,29,.14);border-radius:10px;padding:1rem 1.2rem;margin-top:.4rem;}
+.sjqt{font-family:'Playfair Display',serif;font-size:.92rem;font-style:italic;color:var(--tl);line-height:1.55;margin-bottom:.3rem;}
+.sjqa{font-size:.66rem;color:var(--ml);}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="deck">
+
+<!-- S1 HERO DARK -->
+<div class="slide active" id="s1">
+  <div class="s1bg"></div><div class="s1grid"></div>
+  <div class="s1wrap">
+    <div>
+      <div class="s1-eye">The Real Estate AI Agency</div>
+      <h1 class="s1h1">Never Miss<br>Another <em>Deal.</em></h1>
+      <p class="s1sub">The AI receptionist built for real estate professionals. Your calls are answered around the clock — so you can stay focused on what you do best: closing deals and serving clients.</p>
+      <div class="s1demo">
+        <button class="dbtn" onclick="window.location.href='tel:+19412051892'">📞 Call the Live Demo</button>
+        <span class="dnum">(941) 205-1892</span>
+      </div>
+    </div>
+    <div class="s1stats">
+      <div class="s1stat"><div class="s1stat-v">62%</div><div class="s1stat-l">of real estate calls go unanswered while agents are on showings or in client meetings</div></div>
+      <div class="s1stat"><div class="s1stat-v">21x</div><div class="s1stat-l">one recovered deal at $8,500 average commission covers 21 months of Virtex at $399/mo</div></div>
+      <div class="s1stat"><div class="s1stat-v">48hr</div><div class="s1stat-l">from signup to live — built and managed entirely by our team. Zero setup from you.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S2 REALITY LIGHT -->
+<div class="slide" id="s2">
+  <div class="s2wrap">
+    <div class="s2L">
+      <div class="sl lgt">The Reality</div>
+      <h2 class="s2h2">The Best Agents<br>Are the <em>Busiest</em> Agents.</h2>
+      <p class="s2body">Top producers are constantly moving — showings, negotiations, client meetings, closings. That's exactly where they should be. But that activity creates a gap: the phone goes unanswered, and leads connect with whoever picks up first. It's not a performance issue. It's a coverage issue.</p>
+      <div class="s2hero">
+        <div class="s2hero-v">1 deal / month</div>
+        <div class="s2hero-l">If Virtex helps you capture just one additional deal per month that would have gone unanswered — that single commission covers the entire annual cost of the service. Many times over.</div>
+      </div>
+    </div>
+    <div class="s2R">
+      <div class="fstep"><div class="fnum">1</div><div class="ftxt">Agent is on a showing, in a negotiation, or with a client — exactly where great agents should be</div></div>
+      <div class="fconn"></div>
+      <div class="fstep"><div class="fnum">2</div><div class="ftxt">A motivated buyer or seller calls the office — they're ready to move and want answers now</div></div>
+      <div class="fconn"></div>
+      <div class="fstep bad"><div class="fnum">3</div><div class="ftxt">No one answers. Goes to voicemail. 85% of callers hang up without leaving a message.</div></div>
+      <div class="fconn"></div>
+      <div class="fstep bad"><div class="fnum">4</div><div class="ftxt">Caller moves on — dials the next agent on their list who answers immediately</div></div>
+      <div class="fconn"></div>
+      <div class="fstep bad"><div class="fnum">5</div><div class="ftxt">Commission gone — the agent never knew the opportunity existed. They were doing their job.</div></div>
+      <div class="fconn"></div>
+      <div class="fstep"><div class="fnum" style="background:rgba(46,204,113,.18);color:#1A9E5C;">6</div><div class="ftxt" style="color:#1A9E5C;font-weight:500;">Virtex closes that gap — every call answered while you stay focused on your clients</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S3 COST DARK -->
+<div class="slide" id="s3">
+  <div class="s3wrap">
+    <div class="s3L">
+      <div class="sl drk">The Numbers</div>
+      <h2 class="s3h2">What It Actually<br><em>Costs</em> to Miss a Call.</h2>
+      <p class="s3intro">A human receptionist runs $38,000–$45,000 per year — and still can't answer during lunch, after hours, or on weekends. Every gap in coverage is a gap in your pipeline.</p>
+      <div class="crow"><span class="clbl">Annual salary</span><span class="cval" style="color:var(--md)">−$38,000</span></div>
+      <div class="crow"><span class="clbl">Benefits &amp; payroll taxes</span><span class="cval" style="color:var(--md)">−$6,800</span></div>
+      <div class="crow"><span class="clbl">Training &amp; onboarding</span><span class="cval" style="color:var(--md)">−$1,500</span></div>
+      <div class="crow"><span class="clbl">Turnover &amp; rehiring</span><span class="cval" style="color:var(--md)">−$1,500</span></div>
+      <div class="crow tot"><span class="clbl" style="font-weight:600;color:var(--td)">Total annual human cost</span><span class="cval">$47,800+</span></div>
+      <div class="crow vx"><span class="clbl" style="font-weight:600;color:var(--td)">Virtex Agent plan — full year</span><span class="cval">$4,788</span></div>
+    </div>
+    <div class="s3R">
+      <div class="s3chart-title">Annual Cost Comparison</div>
+      <div class="bar-chart">
+        <div class="bc-row">
+          <div class="bc-label">Human Receptionist</div>
+          <div class="bc-track">
+            <div class="bc-fill" style="width:100%;background:rgba(221,29,29,.55);">
+              <span class="bc-fill-label">$47,800+</span>
+            </div>
+          </div>
+        </div>
+        <div class="bc-row">
+          <div class="bc-label">Part-Time Admin</div>
+          <div class="bc-track">
+            <div class="bc-fill" style="width:52%;background:rgba(221,29,29,.35);">
+              <span class="bc-fill-label">$24,960</span>
+            </div>
+          </div>
+        </div>
+        <div class="bc-row">
+          <div class="bc-label">Generic AI Platform</div>
+          <div class="bc-track">
+            <div class="bc-fill" style="width:28%;background:rgba(221,29,29,.2);">
+              <span class="bc-fill-label">$13,188</span>
+            </div>
+          </div>
+        </div>
+        <div class="bc-row">
+          <div class="bc-label" style="color:var(--green);font-weight:600;">Virtex (Agent Plan)</div>
+          <div class="bc-track">
+            <div class="bc-fill" style="width:10%;background:rgba(46,204,113,.6);">
+              <span class="bc-fill-label" style="position:absolute;left:calc(10% + 8px);">$4,788</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="s3quote" style="margin-top:.75rem;">
+        <div class="s3qt">"The agents who grow fastest aren't working harder — they've removed every unnecessary gap from their lead flow."</div>
+        <div class="s3qa">The case for always-on coverage</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S4 SOLUTION LIGHT -->
+<div class="slide" id="s4">
+  <div class="s4wrap">
+    <div class="s4top">
+      <div>
+        <div class="sl lgt">The Solution</div>
+        <h2 class="s4h2">Your AI Receptionist.<br><em>Built for Real Estate.</em></h2>
+      </div>
+      <p class="s4sub">Sophia is trained specifically on your listings, your agents, and your market. She handles every inbound call professionally — so your team stays focused on clients, closings, and commission. Not the front desk.</p>
+    </div>
+    <div class="s4grid">
+      <div class="fc"><div class="fci">📞</div><div class="fct">24/7 Call Answering</div><div class="fcb">Every inbound call answered instantly — showings, evenings, weekends, holidays. Professional, knowledgeable, always available. No rings, no voicemail, no hold music.</div><div class="fctag">Always on</div></div>
+      <div class="fc"><div class="fci">🏠</div><div class="fct">Listing Knowledge Base</div><div class="fcb">Sophia knows your active listings, price points, features, and area details. Answers every caller question accurately, every time — drawn from your real data.</div><div class="fctag">Real data</div></div>
+      <div class="fc"><div class="fci">🎯</div><div class="fct">Smart Agent Routing</div><div class="fcb">Teams and brokerages: buyers reach buyer specialists, sellers reach listing agents, investors get routed to the right person. Every caller lands where they belong.</div><div class="fctag">Intelligent routing</div></div>
+      <div class="fc"><div class="fci">📅</div><div class="fct">Appointment Follow-Up</div><div class="fcb">Incoming appointment confirmations and missed appointment re-engagement handled automatically — keeping your pipeline warm without any manual follow-up from your team.</div><div class="fctag">Automated</div></div>
+      <div class="fc"><div class="fci">🌐</div><div class="fct">Website Integration</div><div class="fcb">Sophia pulls from your website — current listings, agent bios, office details — so every answer reflects your actual business. Always current, always accurate.</div><div class="fctag">Always current</div></div>
+      <div class="fc"><div class="fci">📋</div><div class="fct">Post-Call Transcripts</div><div class="fcb">Every call logged with a full transcript and lead summary delivered straight to your email. Complete visibility into every conversation — zero effort from your side.</div><div class="fctag">Full visibility</div></div>
+    </div>
+    <div class="s4badge">Live in <span>48 hours</span> · No contracts · Cancel with 60 days written notice</div>
+  </div>
+</div>
+
+<!-- S5 DATA DARK -->
+<div class="slide" id="s5">
+  <div class="s5wrap">
+    <div class="s5L">
+      <div class="sl drk">The Data</div>
+      <h2 class="s5h2">The Agents Who<br>Answer <em>Every</em> Call<br>Win More Business.</h2>
+      <p class="s5sub">This is how the market already behaves. Virtex puts you on the right side of every one of these numbers.</p>
+      <div class="s5stats">
+        <div class="s5stat"><div class="s5stat-v">62%</div><div class="s5stat-l">of inbound real estate calls go unanswered while the agent is on a showing or with a client</div></div>
+        <div class="s5stat"><div class="s5stat-v">78%</div><div class="s5stat-l">of buyers work with the first agent who responds — speed of answer is your biggest competitive edge</div></div>
+        <div class="s5stat"><div class="s5stat-v">85%</div><div class="s5stat-l">of callers who hit voicemail hang up without leaving a message and call the next agent on the list</div></div>
+        <div class="s5stat"><div class="s5stat-v">40%</div><div class="s5stat-l">of all real estate inquiries come in after business hours — coverage gaps cost deals every night</div></div>
+      </div>
+    </div>
+    <div class="s5R">
+      <div class="s5chart-title">Lead Conversion Rate vs. Response Time</div>
+      <div class="s5canvas-wrap">
+        <canvas id="chartCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S6 DEMO LIGHT -->
+<div class="slide" id="s6">
+  <div class="s6wrap">
+    <div class="s6L">
+      <div class="sl lgt">Live Demo</div>
+      <h2 class="s6h2">This Is What Your<br>Clients <em>Hear.</em></h2>
+      <p class="s6sub">Sophia is live right now on our demo line. Call the number, ask about a waterfront listing, ask for an agent, try to trip her up. She knows the listings, the agents, and the area.</p>
+      <div class="chat">
+        <div class="chat-hdr"><div class="chav">S</div><div><div class="chn"><span class="live-dot"></span>Sophia — AI Receptionist</div><div class="chr">Live · Real Estate Demo Line</div></div></div>
+        <div class="cmsg ai"><div class="cmav">S</div><div class="cmbub">Thank you for calling — this is Sophia. How can I help you today?</div></div>
+        <div class="cmsg hu"><div class="cmav">👤</div><div class="cmbub">Hi — I saw a waterfront listing on River Bay Drive. Can you tell me more about it?</div></div>
+        <div class="cmsg ai"><div class="cmav">S</div><div class="cmbub">Of course — 5566 River Bay Drive is a beautiful 3 bedroom waterfront estate on just under 2 acres, listed at $2,950,000. Carla Nix is the specialist on that property. Would you like me to connect you with her?</div></div>
+        <div class="cmsg hu"><div class="cmav">👤</div><div class="cmbub">Yes — what's the best way to reach her?</div></div>
+        <div class="cmsg ai"><div class="cmav">S</div><div class="cmbub">Let me take down your details and make sure Carla gets your information directly. She'll be in touch very shortly. May I get your name?</div></div>
+      </div>
+    </div>
+    <div class="s6R">
+      <div class="dcta">
+        <div class="dcta-lbl">Call the live demo right now</div>
+        <div class="dcta-num">(941) 205-1892</div>
+        <div class="dcta-sub">Our AI answering as a real estate demo. Ask about listings, agents, the market. Try to catch her off-guard.</div>
+        <button class="dcall" onclick="window.location.href='tel:+19412051892'">📞 Call Now</button>
+      </div>
+      <div>
+        <div class="sl lgt" style="margin-bottom:.55rem;">What Sophia Handles</div>
+        <div class="hlist">
+          <div class="hi"><div class="hdot"></div><div class="htxt">Buyer inquiries on active and pending listings</div></div>
+          <div class="hi"><div class="hdot"></div><div class="htxt">Seller leads and market valuation requests</div></div>
+          <div class="hi"><div class="hdot"></div><div class="htxt">Agent routing by specialty, area, and buyer/seller type</div></div>
+          <div class="hi"><div class="hdot"></div><div class="htxt">Investor and relocation inquiries</div></div>
+          <div class="hi"><div class="hdot"></div><div class="htxt">After hours and weekend full coverage</div></div>
+          <div class="hi"><div class="hdot"></div><div class="htxt">Lead capture and immediate agent notification</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S7 HOW IT WORKS DARK -->
+<div class="slide" id="s7">
+  <div class="s7wrap">
+    <div class="sl drk">How It Works</div>
+    <h2 class="s7h2">Live in 48 Hours.<br>Zero Work From You.</h2>
+    <p class="s7sub">Our team builds and manages everything. You fill out a quick onboarding form — we handle the rest.</p>
+    <div class="s7steps">
+      <div class="sc"><div class="sc-num">01</div><div class="sc-icon">📝</div><div class="sc-title">We Learn Your Business</div><div class="sc-body">A quick onboarding form covers your agents, listings, market area, and process. You provide the details — we handle every bit of the build, configuration, and testing.</div></div>
+      <div class="sc"><div class="sc-num">02</div><div class="sc-icon">🤖</div><div class="sc-title">We Build Sophia</div><div class="sc-body">Our team trains your custom AI on your specific office — listings, agents, routing logic, your brand voice. Every scenario tested before going live. Zero setup from you.</div></div>
+      <div class="sc"><div class="sc-num">03</div><div class="sc-icon">📲</div><div class="sc-title">You Forward Your Line</div><div class="sc-body">Your existing number stays the same. When you're unavailable, calls forward to Sophia automatically. One 30-second setup — done once, runs forever.</div></div>
+      <div class="sc"><div class="sc-num">04</div><div class="sc-icon">📞</div><div class="sc-title">Sophia Answers Every Call</div><div class="sc-body">Instantly and professionally, 24/7. Showings, evenings, weekends. Every caller gets a real, knowledgeable response. Every lead captured and passed directly to you.</div></div>
+      <div class="sc"><div class="sc-num">05</div><div class="sc-icon">📋</div><div class="sc-title">You See Everything</div><div class="sc-body">Full call transcripts delivered to your email after every conversation. Every lead captured and logged. Complete visibility — no surprises, no missed context, no gaps.</div></div>
+    </div>
+    <div class="s7bot">
+      <div class="s7bs"><div class="s7bv">48 hrs</div><div class="s7bl">From signup to live</div></div>
+      <div class="s7bs"><div class="s7bv">$0</div><div class="s7bl">Setup work from you</div></div>
+      <div class="s7bs"><div class="s7bv">24/7</div><div class="s7bl">Coverage from day one</div></div>
+      <div class="s7bs"><div class="s7bv">60 days</div><div class="s7bl">Written notice to cancel</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- S_JOBS NOT TAKING JOBS LIGHT -->
+<div class="slide" id="sjobs">
+  <div class="sjwrap">
+    <div class="sjL">
+      <div class="sl lgt">Our Philosophy</div>
+      <h2 class="sjh2">We're Not Here to<br><em>Replace</em> Anyone.<br>We're Here to Help.</h2>
+      <p class="sjbody">Virtex doesn't eliminate your front desk — it eliminates the bottleneck. When Sophia handles inbound calls, your coordinator, admin, or receptionist is freed from the phone and redirected into higher-value work: client follow-up, transaction support, marketing, and relationship management. The business grows. The team does more meaningful work. Everyone wins.</p>
+      <div class="sjstat">
+        <div class="sjstat-v">~40 hrs / month</div>
+        <div class="sjstat-l">Average time office staff spend on inbound call handling and scheduling — time Virtex gives back to your team immediately, every month</div>
+      </div>
+      <div class="sjstat">
+        <div class="sjstat-v">$0 added headcount</div>
+        <div class="sjstat-l">Same team. More capacity. Virtex scales your existing staff by removing the lowest-value task from their day — so they can focus on work that actually grows the business</div>
+      </div>
+    </div>
+    <div class="sjR">
+      <div class="sjshift-title">From Phone Answering → To Higher-Value Work</div>
+      <div class="sjcard">
+        <div class="sjarrow">
+          <div class="sjfrom">Before</div>
+          <div class="sjico">↓</div>
+          <div class="sjto">After</div>
+        </div>
+        <div>
+          <div class="sjctitle">Answering Calls → Client Relationship Management</div>
+          <div class="sjcbody">Staff who spent hours fielding buyer inquiries and FAQs are now focused on nurturing existing relationships — the work that drives referrals and repeat business.</div>
+        </div>
+      </div>
+      <div class="sjcard">
+        <div class="sjarrow">
+          <div class="sjfrom">Before</div>
+          <div class="sjico">↓</div>
+          <div class="sjto">After</div>
+        </div>
+        <div>
+          <div class="sjctitle">Chasing No-Shows → Transaction Coordination</div>
+          <div class="sjcbody">Manual rescheduling and follow-up are handled automatically. That time goes back into coordinating closings, managing paperwork, and supporting active transactions.</div>
+        </div>
+      </div>
+      <div class="sjcard">
+        <div class="sjarrow">
+          <div class="sjfrom">Before</div>
+          <div class="sjico">↓</div>
+          <div class="sjto">After</div>
+        </div>
+        <div>
+          <div class="sjctitle">Waiting for the Phone → Growing the Business</div>
+          <div class="sjcbody">Instead of reactive phone coverage, your team supports listings, marketing, open houses, and community outreach — the work that brings in the next deal.</div>
+        </div>
+      </div>
+      <div class="sjquote">
+        <div class="sjqt">"Virtex doesn't take a seat at the table — it pulls up a new chair. Your team does more meaningful work. Your business closes more deals."</div>
+        <div class="sjqa">Virtex Solutions LLC</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- S8 PRICING LIGHT -->
+<div class="slide" id="s8">
+  <div class="s8wrap">
+    <div class="sl lgt">Pricing</div>
+    <h2 class="s8h2">Simple Pricing. One Deal Covers It All.</h2>
+    <p class="s8sub">At an $8,500 average commission — one deal per month covers the Agent plan 21 times over. The math is straightforward.</p>
+    <div class="pgrid">
+      <div class="pc">
+        <div class="ptier">Agent</div>
+        <div class="pprice">$399<sub>/month</sub></div>
+        <div class="psetup">$499 one-time setup · Single agent</div>
+        <div class="pdiv"></div>
+        <div class="pf">24/7 inbound call answering</div>
+        <div class="pf">Buyer &amp; seller call handling</div>
+        <div class="pf">Incoming appointment follow-up</div>
+        <div class="pf">Missed appointment follow-up</div>
+        <div class="pf">Website data integration</div>
+        <div class="pf">Listing knowledge base</div>
+        <div class="pf">White-glove setup &amp; onboarding</div>
+        <div class="pf">Ongoing monitoring &amp; optimization</div>
+        <div class="pf dim">Post-call transcripts</div>
+        <div class="pf dim">Team routing &amp; assignment</div>
+        <div class="pcta">1 deal = 21 months of Virtex covered</div>
+      </div>
+      <div class="pc ft">
+        <div class="ptier">Team</div>
+        <div class="pprice">$299<sub>/agent/mo</sub></div>
+        <div class="psetup">$899 one-time setup · 3–5 agents</div>
+        <div class="pdiv"></div>
+        <div class="pf">Everything in Agent — per team member</div>
+        <div class="pf">Smart routing by agent specialty</div>
+        <div class="pf">Buyer &amp; seller specialist routing</div>
+        <div class="pf">Incoming &amp; missed appt. follow-up</div>
+        <div class="pf">Post-call transcripts to email</div>
+        <div class="pf">Website data integration</div>
+        <div class="pf">Team-level analytics &amp; reporting</div>
+        <div class="pf">Full team listing knowledge base</div>
+        <div class="pf">White-glove setup &amp; onboarding</div>
+        <div class="pf">Priority support</div>
+        <div class="pcta">3 agents · $897/mo total starting rate</div>
+      </div>
+      <div class="pc">
+        <div class="ptier">Brokerage</div>
+        <div class="pprice" style="font-size:2.2rem;">From $250<sub>/agent/mo</sub></div>
+        <div class="psetup">Setup negotiated · 6+ agents · Custom</div>
+        <div class="pdiv"></div>
+        <div class="pf">Everything in Team — unlimited agents</div>
+        <div class="pf">Custom routing &amp; agent pyramid</div>
+        <div class="pf">Brokerage-level knowledge base</div>
+        <div class="pf">Website &amp; IDX data integration</div>
+        <div class="pf">Post-call transcripts to email</div>
+        <div class="pf">Full brokerage analytics dashboard</div>
+        <div class="pf">Dedicated account manager</div>
+        <div class="pf">Custom follow-up sequences</div>
+        <div class="pf">Scalable to any agent count</div>
+        <div class="pf">White-glove setup &amp; onboarding</div>
+        <div class="pcta">Pricing finalized on discovery call</div>
+      </div>
+    </div>
+    <div class="s8foot">
+      <div class="s8fi">No contracts</div>
+      <div class="s8fi">Cancel with 60 days written notice</div>
+      <div class="s8fi">Live in 48 hours</div>
+      <div class="s8fi">White-glove setup — zero work from you</div>
+    </div>
+  </div>
+</div>
+
+<!-- S9 CTA DARK -->
+<div class="slide" id="s9">
+  <div class="s9bg"></div>
+  <div class="s9wrap">
+    <div class="s9L">
+      <div class="sl drk">Let's Do This</div>
+      <h2 class="s9h2">Ready to Stay<br>Focused on<br><em>Closing?</em></h2>
+      <p class="s9sub">Getting started takes less than 15 minutes on your end. Sophia is live within 48 hours — trained on your listings, your agents, your market. Your team doesn't touch a single setting.</p>
+      <div class="s9acts">
+        <button class="ctp" onclick="window.location.href='tel:+19412051892'">📞 Call the Demo — (941) 205-1892</button>
+        <button class="cts" onclick="window.location.href='mailto:christian@virtexsolutions.io'">✉ Schedule a Discovery Call</button>
+        <button class="cts" onclick="window.location.href='https://virtexsolutions.io'">🌐 virtexsolutions.io</button>
+      </div>
+    </div>
+    <div class="s9R">
+      <div class="ns"><div class="nsn">1</div><div><div class="nst">Call the Demo Right Now</div><div class="nsb">Call (941) 205-1892 while we're sitting here. Ask about a listing, ask for an agent. Hear exactly what your clients would experience.</div></div></div>
+      <div class="ns"><div class="nsn">2</div><div><div class="nst">15-Minute Discovery Call</div><div class="nsb">We learn your agents, listings, and market area. No commitment required. We just need to understand your business to build it right.</div></div></div>
+      <div class="ns"><div class="nsn">3</div><div><div class="nst">We Build Everything</div><div class="nsb">Our team trains Sophia on your office. You complete the onboarding form. We handle every setting, test every scenario, and confirm before going live.</div></div></div>
+      <div class="ns"><div class="nsn">4</div><div><div class="nst">Live in 48 Hours</div><div class="nsb">Sophia goes live. Every call answered from that point on. Your focus stays on clients, closings, and listings — exactly where it belongs.</div></div></div>
+      <div class="s9con"><div class="s9cl">Get in touch</div><div class="s9ci"><a href="mailto:christian@virtexsolutions.io">christian@virtexsolutions.io</a> · <a href="tel:+16027770644">602-777-0644</a> · <a href="https://virtexsolutions.io">virtexsolutions.io</a></div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<div class="nav">
+  <button class="nb" onclick="go(-1)">‹</button>
+  <div id="dots"></div>
+  <button class="nb" onclick="go(1)">›</button>
+  <div class="nl" id="nl">1/10</div>
+</div>
+
+<script>
+const SL=['s1','s2','s3','s4','s5','s6','s7','sjobs','s8','s9'];const T=SL.length;let c=0;
+function bd(){const el=document.getElementById('dots');SL.forEach((_,i)=>{const d=document.createElement('div');d.className='nd'+(i===0?' on':'');d.onclick=()=>gt(i);el.appendChild(d);});}
+function gt(n){const p=document.getElementById(SL[c]);p.classList.remove('active');p.classList.add('exit');setTimeout(()=>p.classList.remove('exit'),520);c=Math.max(0,Math.min(T-1,n));document.getElementById(SL[c]).classList.add('active');document.querySelectorAll('.nd').forEach((d,i)=>d.classList.toggle('on',i===c));document.getElementById('nl').textContent=(c+1)+'/'+T;document.getElementById('progress').style.width=((c+1)/T*100)+'%';}
+function go(d){gt(c+d);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+let tx=0;document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(dx<0?1:-1);},{passive:true});
+bd();document.getElementById('progress').style.width=(1/T*100)+'%';
+</script>
+
+<script>
+// Draw the response time bar chart on canvas when slide 5 is shown
+function drawChart() {
+  const canvas = document.getElementById('chartCanvas');
+  if (!canvas) return;
+  const wrap = canvas.parentElement;
+  const W = wrap.clientWidth;
+  const H = wrap.clientHeight;
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, W, H);
+
+  const data = [
+    { label: 'Under 1 min', val: 100, color: '#DD1D1D' },
+    { label: 'Under 5 min', val: 62,  color: 'rgba(221,29,29,.78)' },
+    { label: 'Under 30 min',val: 36,  color: 'rgba(221,29,29,.55)' },
+    { label: 'Under 1 hr',  val: 17,  color: 'rgba(221,29,29,.38)' },
+    { label: 'Under 24 hrs',val: 7,   color: 'rgba(221,29,29,.22)' },
+    { label: 'Over 24 hrs', val: 2,   color: 'rgba(221,29,29,.12)' },
+  ];
+
+  const pad = { top: 30, right: 20, bottom: 60, left: 55 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = H - pad.top - pad.bottom;
+  const barW = chartW / data.length;
+  const barGap = barW * 0.25;
+  const bW = barW - barGap;
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,.05)';
+  ctx.lineWidth = 1;
+  [0, 25, 50, 75, 100].forEach(pct => {
+    const y = pad.top + chartH - (pct / 100) * chartH;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, y);
+    ctx.lineTo(pad.left + chartW, y);
+    ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,.25)';
+    ctx.font = '11px DM Mono, monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(pct + '%', pad.left - 8, y + 4);
+  });
+
+  // Bars
+  data.forEach((d, i) => {
+    const x = pad.left + i * barW + barGap / 2;
+    const barH = (d.val / 100) * chartH;
+    const y = pad.top + chartH - barH;
+
+    // Bar fill
+    ctx.fillStyle = d.color;
+    ctx.beginPath();
+    const r = 5;
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + bW - r, y);
+    ctx.quadraticCurveTo(x + bW, y, x + bW, y + r);
+    ctx.lineTo(x + bW, y + barH);
+    ctx.lineTo(x, y + barH);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    ctx.fill();
+
+    // Value label on top of bar
+    ctx.fillStyle = i === 0 ? '#fff' : 'rgba(255,255,255,.7)';
+    ctx.font = 'bold 14px DM Mono, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(d.val + '%', x + bW / 2, y - 8);
+
+    // X-axis label
+    ctx.fillStyle = 'rgba(255,255,255,.4)';
+    ctx.font = '11px DM Sans, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(d.label, x + bW / 2, pad.top + chartH + 20);
+
+    // Highlight first bar with label
+    if (i === 0) {
+      ctx.fillStyle = 'rgba(221,29,29,.15)';
+      ctx.fillRect(x - 4, pad.top, bW + 8, chartH);
+    }
+  });
+
+  // Virtex line annotation
+  const lineY = pad.top + chartH - (100 / 100) * chartH;
+  ctx.strokeStyle = 'rgba(46,204,113,.5)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  ctx.moveTo(pad.left, lineY);
+  ctx.lineTo(pad.left + chartW, lineY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(46,204,113,.9)';
+  ctx.font = 'bold 10px DM Sans, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText('← Virtex answers here', pad.left + chartW, lineY - 6);
+}
+
+// Draw when s5 becomes active — works with array-based nav
+const origGt = window.gt;
+window.gt = function(n) {
+  origGt(n);
+  if (SL[n] === 's5') setTimeout(drawChart, 100);
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => { if (document.getElementById('s5').classList.contains('active')) drawChart(); }, 200);
+});
+
+window.addEventListener('resize', () => {
+  if (document.getElementById('s5').classList.contains('active')) drawChart();
+});
+</script>
+
+</body>
+</html>
